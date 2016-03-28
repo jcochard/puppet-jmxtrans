@@ -1,6 +1,6 @@
 <%
 
-(jmx_host, jmx_port) = jmx.split(':')
+(jmx_host, jmx_port) = @jmx.split(':')
 
 # Build output writer json strings
 # from the outfile, ganglia, and/or
@@ -47,7 +47,7 @@ end
 
 { "servers" : [ {
 
-  "host" : "<%= jmx_host %>", 
+  "host" : "<%= jmx_host %>",
   "port" : <%= jmx_port %>,
 <% if @jmx_username -%>
   "username" : "<%= jmx_username %>"
@@ -58,7 +58,7 @@ end
   "queries" :
   [
 <% # loop over each query and output it with each configured output_writer -%>
-<% queries.each_with_index do |query, index| -%> 
+<% queries.each_with_index do |query, index| -%>
 <% unless index == 0 -%>
     ,
 <% end -%>
