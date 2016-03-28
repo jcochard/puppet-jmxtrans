@@ -18,7 +18,7 @@ if @outfile
 end
 
 if @ganglia
-  (ganglia_host, ganglia_port) = ganglia.split(':') if @ganglia
+  (ganglia_host, ganglia_port) = @ganglia.split(':') if @ganglia
 
   ganglia_output_writer = "{
         \"@class\" : \"com.googlecode.jmxtrans.model.output.GangliaWriter\",
@@ -31,7 +31,7 @@ if @ganglia
 end
 
 if @graphite
-  (graphite_host, graphite_port) = graphite.split(':')
+  (graphite_host, graphite_port) = @graphite.split(':')
   graphite_output_writer = "{
         \"@class\" : \"com.googlecode.jmxtrans.model.output.GraphiteWriter\",
         \"settings\"   : {
@@ -50,15 +50,15 @@ end
   "host" : "<%= jmx_host %>",
   "port" : <%= jmx_port %>,
 <% if @jmx_username -%>
-  "username" : "<%= jmx_username %>"
+  "username" : "<%= @jmx_username %>"
 <% end -%>
 <% if @jmx_password -%>
-  "password" : "<%= jmx_password %>"
+  "password" : "<%= @jmx_password %>"
 <% end -%>
   "queries" :
   [
 <% # loop over each query and output it with each configured output_writer -%>
-<% queries.each_with_index do |query, index| -%>
+<% @queries.each_with_index do |query, index| -%>
 <% unless index == 0 -%>
     ,
 <% end -%>
