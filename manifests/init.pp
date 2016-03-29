@@ -63,7 +63,7 @@ define jmxtrans::metrics(
 		file_line { 'jmx_defaults':
 	    path   => $defaults_location,
 	    line   => 'export SECONDS_BETWEEN_RUNS=10',
-	    match  => 'export SECONDS_BETWEEN_RUNS='
+	    match  => 'export SECONDS_BETWEEN_RUNS=',
 			notify => Service['jmxtrans'],
 	  }
 	}
