@@ -18,7 +18,7 @@ if @outfile
 end
 
 if @ganglia
-  (ganglia_host, ganglia_port) = @ganglia.split(':') if @ganglia
+  (ganglia_host, ganglia_port) = ganglia.split(':') if @ganglia
 
   ganglia_output_writer = "{
         \"@class\" : \"com.googlecode.jmxtrans.model.output.GangliaWriter\",
@@ -50,10 +50,10 @@ end
   "host" : "<%= jmx_host %>",
   "port" : <%= jmx_port %>,
 <% if @jmx_username -%>
-  "username" : "<%= @jmx_username %>"
+  "username" : "<%= jmx_username %>"
 <% end -%>
 <% if @jmx_password -%>
-  "password" : "<%= @jmx_password %>"
+  "password" : "<%= jmx_password %>"
 <% end -%>
   "queries" :
   [
@@ -63,9 +63,11 @@ end
     ,
 <% end -%>
     {
-      "obj"  : "<%= query["obj"] %>",
+      "obj"  : "<%= query['obj'] %>",
       "attr" : [ <%= query['attr'].map {|t| "\""+t.to_s+"\""}.join(', ') %> ],
-<% puts "      \"resultAlias\" : #{query["resultAlias"]}" if query.has_key? "resultAlias" -%>
+      <%- if query['resultAlias'] -%>
+      "resultAlias" : "<%= query['resultAlias'] %>"
+      <%- end -%>
       "outputWriters" : [
       <%= output_writers.join(",\n      ") %>
       ]
