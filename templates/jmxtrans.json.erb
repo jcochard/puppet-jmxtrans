@@ -18,8 +18,8 @@ if @outfile
 end
 
 if @ganglia
-  (ganglia_host, ganglia_port) = ganglia.split(':') if @ganglia
-
+  (ganglia_host, ganglia_port) = @ganglia.split(':')
+  ganglia_group_name = @ganglia_group_name
   ganglia_output_writer = "{
         \"@class\" : \"com.googlecode.jmxtrans.model.output.GangliaWriter\",
         \"settings\"  : {
@@ -32,6 +32,7 @@ end
 
 if @graphite
   (graphite_host, graphite_port) = @graphite.split(':')
+  graphite_root_prefix = @graphite_root_prefix
   graphite_output_writer = "{
         \"@class\" : \"com.googlecode.jmxtrans.model.output.GraphiteWriter\",
         \"settings\"   : {
@@ -66,7 +67,7 @@ end
       "obj"  : "<%= query['obj'] %>",
       "attr" : [ <%= query['attr'].map {|t| "\""+t.to_s+"\""}.join(', ') %> ],
       <%- if query['resultAlias'] -%>
-      "resultAlias" : "<%= query['resultAlias'] %>"
+      "resultAlias" : "<%= query['resultAlias'] %>",
       <%- end -%>
       "outputWriters" : [
       <%= output_writers.join(",\n      ") %>

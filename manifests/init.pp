@@ -1,5 +1,5 @@
 # == Class jmxtrans
-# 
+#
 class jmxtrans {
 	include jmxtrans::install
 	include jmxtrans::service
@@ -18,7 +18,7 @@ class jmxtrans {
 # $queries              - array of hashes of the form [ { "obj" => "JMX object name", "attr" => [ "array", "of", "JMX", "metric", "names" ] }, ... ]
 # $jmx_username         - JMX username (if there is one)
 # $jmx_password         - JMX password (if there is one)
-# $resultAlias          - resultAlias for the query results
+# $seconds              - set the seconds between runs
 # $ganglia              - host:port of Ganglia gmond
 # $ganglia_group_name   - Ganglia metrics group
 # $graphite             - host:port of Graphite server
@@ -30,6 +30,7 @@ define jmxtrans::metrics(
 	$jmx_username         = undef,
 	$jmx_password         = undef,
 	$resultAlias          = undef,
+	$seconds              = undef,
 	$ganglia              = undef,
 	$ganglia_group_name   = undef,
 	$graphite             = undef,
@@ -43,5 +44,27 @@ define jmxtrans::metrics(
 		content => template("jmxtrans/jmxtrans.json.erb"),
 		notify  => Service["jmxtrans"],
 		require => Package["jmxtrans"],
+	}
+
+	# This should probably go in a params file
+	if $seconds {
+		case $::osfamily {
+			'Debian': {
+				$defaults_location = '/etc/default/jmxtrans'
+			}
+			'Redhat': {
+				$defaults_location = '/etc/sysconfig/jmxtrans'
+			}
+			default: {
+				fail("\"${module_name}\" provides no defaults_location
+							for \"${::osfamily}\"")
+			}
+		}
+		file_line { 'jmx_defaults':
+	    path   => $defaults_location,
+	    line   => 'export SECONDS_BETWEEN_RUNS=10',
+	    match  => 'export SECONDS_BETWEEN_RUNS='
+			notify => Service['jmxtrans'],
+	  }
 	}
 }
