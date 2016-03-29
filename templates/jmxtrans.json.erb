@@ -51,10 +51,10 @@ end
   "host" : "<%= jmx_host %>",
   "port" : <%= jmx_port %>,
 <% if @jmx_username -%>
-  "username" : "<%= jmx_username %>"
+  "username" : "<%= @jmx_username %>"
 <% end -%>
 <% if @jmx_password -%>
-  "password" : "<%= jmx_password %>"
+  "password" : "<%= @jmx_password %>"
 <% end -%>
   "queries" :
   [
